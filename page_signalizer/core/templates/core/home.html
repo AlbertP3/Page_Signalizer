@@ -1,0 +1,58 @@
+{% extends "page_signalizer/base.html" %}
+
+{% block body %}
+
+    <h2>List of Templates</h2>
+    <br>
+    <div class="container">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">URL<span class="smf">(abbr)</span></th>
+                <th scope="col">Interval<span class="smf">(seconds)</span></th>
+                <th scope="col">Sequence</th>
+                <th scope="col">Action</th>
+                <th scope="col">Modify</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for template in templates %}
+                    <tr>
+                        <td>{{ template.name }}</td>
+                        <td><a href="{{ template.url }}">{{ template.short_url }}</a></td>
+                        <td>{{ template.interval_seconds }}</td>
+                        <td>{{ template.seq }}</td>
+                        
+                        <!-- Action -->
+                        <td>
+                            <form action="{% url 'core:scrape' template.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="take-action" class="btn btn-success">Scrape</button>
+                            </form>
+                        </td>
+
+                        <!-- Modify -->
+                        <td>
+                            <form action="{% url 'core:update' template.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="take-action" class="btn btn-primary">Edit</button>
+                            </form>
+                        </td>
+
+                        <!-- Delete -->
+                        <td>
+                            <form action="{% url 'core:delete' template.id %}">
+                                {% csrf_token %}
+                                <button type="submit" name="take-action" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+    
+{% endblock %}

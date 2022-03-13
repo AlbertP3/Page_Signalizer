@@ -1,0 +1,67 @@
+{% extends "page_signalizer/base.html" %}
+
+{% block body %}
+    
+<div class="container">
+    <div class="card">
+        <div class="h-100 row align-items-center" id="main_div">
+            <textarea id="scrape-log" cols="100" rows="20" class="mb-1"></textarea>
+            <br>
+            <input id="scrape-message-submit" type="button" class="btn btn-success" value="Scrape">
+        </div>
+    </div>
+</div>
+<!-- used in kwargs in consumers.py -->
+{{ scraper_id|json_script:"scraper-id" }}
+
+<script>
+    const id = "{{ template.id }}";
+
+    const scrapeSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/scrape/'
+        + id
+        + '/'
+    );
+
+    scrapeSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const msg = data.timestamp + ' | ' + data.msg + '\n';
+            document.querySelector('#scrape-log').value += msg;
+
+            if(data.is_success){
+                document.querySelector('#scrape-message-submit').remove();
+                const link_button = document.createElement("a");
+                link_button.href = data.url;
+                link_button.className = "btn btn-primary";
+                const text = document.createTextNode('Go to Page');
+                link_button.appendChild(text);
+
+                var target_div = document.querySelector('#main_div');
+                target_div.appendChild(link_button);
+            }
+            
+    };
+
+    scrapeSocket.onclose = function(e) {
+            console.error('Scrape socket closed unexpectedly');
+    };
+
+    document.querySelector('#scrape-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#scrape-message-submit');
+            const do_proceed = messageInputDom.value === "Scrape";
+            const template_id = "{{ template.id }}"
+
+            scrapeSocket.send(JSON.stringify({
+                'do_proceed': do_proceed,
+                'template_id': template_id,
+            }));
+            
+            // to be uncommented once auto-mode is implemented
+            // const next_mode = do_proceed ? "Stop" : "Scrape";
+            // document.querySelector('#scrape-message-submit').value = next_mode;
+    };
+
+</script>
+{% endblock %}

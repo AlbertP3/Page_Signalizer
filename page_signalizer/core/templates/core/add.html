@@ -1,0 +1,38 @@
+{% extends "page_signalizer/base.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Add Connection Specs Template</h2>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card">
+                    <div class="form-group">
+                        <div>
+                            <br>
+                        <form method="POST">
+                        {% csrf_token %}
+                            <div>
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        {{ field.label_tag}}
+                                        </br>
+                                        {{ field }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <br>
+                                <button type="submit" class="btn btn-success">Add</button>
+                            </div>
+                            <br>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

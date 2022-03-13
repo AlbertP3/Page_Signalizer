@@ -1,0 +1,24 @@
+{% extends "page_signalizer/base.html" %}
+
+{% block body %}
+    <h2>Hello {{ user.username }}!</h2>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card px-4">
+                    <br>
+                    <div class="offset-md-4">
+                        <img src="{{ user.profile.image.url }}" height="125px", height="125px">
+                    </div>
+                    <br>
+                    <h6>Location: {{ user_data.location }}</h6>
+                    <h6>Date Created: {{ user.date_joined}}</h6>
+                    <h6>Templates Owned: {{ templates_count }}</h6>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

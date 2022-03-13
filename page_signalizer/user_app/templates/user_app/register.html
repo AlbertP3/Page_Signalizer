@@ -1,0 +1,28 @@
+{% extends "page_signalizer/base.html" %}
+
+{% block body %}
+
+<h2>Register</h2>
+<br>
+
+<div class="container"> 
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag}}
+                            </br>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <button type="submit" class="btn btn-success">Sign-up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
