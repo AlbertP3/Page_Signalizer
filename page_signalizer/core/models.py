@@ -30,6 +30,10 @@ class Connection_Spec(models.Model):
     mode = models.CharField(max_length=100, choices=MODE_CHOICES, default='EXISTS')
     username = models.CharField(max_length=100, default=None, null=True, blank=True)
     password = models.CharField(max_length=100, default=None, null=True, blank=True)
+    max_cycles = models.IntegerField(default=10, validators=[
+            MaxValueValidator(300),
+            MinValueValidator(1)
+        ])
 
 
     def __str__(self):

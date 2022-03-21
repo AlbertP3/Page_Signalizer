@@ -44,25 +44,13 @@ class Page_scraper():
             return None
             
 
-    def init_signalizer(self):
+    def get_scraping_results(self):
         with requests.Session() as session:
 
             # auth if username and password were provided
             if self.username not in [None,''] and self.password not in [None,'']:
                 self.authenticate(session)
 
-            is_matched = False
-
-            # start connections loop - TODO posting to websocket
-            # while not is_matched and self.CYCLES_COUNT < self.CYCLES_LIMIT:
-            #     self.CYCLES_COUNT+=1
-            #     is_matched = self.check_exists(session)
-            #     if self.mode == 'not_equal':
-            #         is_matched = not is_matched           
-            #     if not is_matched:
-            #         self.wait_between_connections()
-            
-            # MVP - returns result of just one search
             is_matched = self.check_exists(session)
 
             # announce results
@@ -78,7 +66,7 @@ class Page_scraper():
         timestamp = datetime.datetime.strftime(datetime.datetime.now(), '%d-%m-%Y %H:%M:%S')
         return {'IS_SUCCESS':is_success, 
                 'TIMESTAMP':timestamp, 
-                'MSG':message, 
+                'MSG':message,
                 'URL':self.url}
 
 

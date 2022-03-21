@@ -1,7 +1,9 @@
 {% extends "page_signalizer/base.html" %}
 
 {% block body %}
-    
+
+<audio id="notification_sound" src="../../../media/notification.mp3" preload="auto"></audio>
+
 <div class="container">
     <div class="card">
         <div class="h-100 row align-items-center" id="main_div">
@@ -30,16 +32,23 @@
             const msg = data.timestamp + ' | ' + data.msg + '\n';
             document.querySelector('#scrape-log').value += msg;
 
-            if(data.is_success){
+            if(data.is_success){                
+                // Create new button directing to the page
                 document.querySelector('#scrape-message-submit').remove();
                 const link_button = document.createElement("a");
                 link_button.href = data.url;
                 link_button.className = "btn btn-primary";
                 const text = document.createTextNode('Go to Page');
                 link_button.appendChild(text);
-
                 var target_div = document.querySelector('#main_div');
                 target_div.appendChild(link_button);
+
+                // notify user
+                document.getElementById('notification_sound').play();
+                if (window.confirm(data.title + '\n\n' + data.msg + '\n\n' + 'Press OK to redirect.')) 
+                {
+                window.location.href=data.url;
+                };
             }
             
     };
@@ -58,9 +67,9 @@
                 'template_id': template_id,
             }));
             
-            // to be uncommented once auto-mode is implemented
-            // const next_mode = do_proceed ? "Stop" : "Scrape";
-            // document.querySelector('#scrape-message-submit').value = next_mode;
+
+            const next_mode = do_proceed ? "Stop" : "Scrape";
+            document.querySelector('#scrape-message-submit').value = next_mode;
     };
 
 </script>

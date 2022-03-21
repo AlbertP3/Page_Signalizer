@@ -76,20 +76,20 @@ WSGI_APPLICATION = 'page_signalizer.wsgi.application'
 ASGI_APPLICATION = 'page_signalizer.asgi.application'
 
 # only for dev. Redis for prod
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
-# }
-
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -147,8 +147,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
 # where e.g. images are stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
-MEDIA_URL = '/pictures/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

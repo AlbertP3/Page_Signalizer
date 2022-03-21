@@ -18,7 +18,7 @@ def home_page(request):
 # login require in urls.py
 class Render_add(CreateView):
     model = Connection_Spec
-    fields = ['name', 'url', 'seq', 'interval_seconds']
+    fields = ['name', 'url', 'seq', 'interval_seconds', 'max_cycles', 'rand', 'eta']
     template_name = 'core/add.html'
 
 
