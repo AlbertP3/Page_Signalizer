@@ -15,9 +15,9 @@ Tired of manually refreshing the page, in wait for that new video or post? Here 
 <li>Run Scraping</li>
 </ol>
 
-![Home Page](page_signalizer/pictures/readme_pictures/home.PNG)
-![Scrape-Start](page_signalizer/pictures/readme_pictures/scrape.PNG)
-![Scrape-Succcess](page_signalizer/pictures/readme_pictures/success.PNG)
+![Home Page](page_signalizer/media/readme_pictures/home.PNG)
+![Scrape-Start](page_signalizer/media/readme_pictures/scrape.PNG)
+![Scrape-Succcess](page_signalizer/media/readme_pictures/success.PNG)
 
 <h1> Tech Stack </h1>
 <ul>
