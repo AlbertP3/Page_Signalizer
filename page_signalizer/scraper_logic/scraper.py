@@ -27,6 +27,8 @@ class Page_scraper():
         self.interval_seconds = float(connection_specs.interval_seconds)
         self.msg = connection_specs.msg
         self.rand = float(connection_specs.rand)
+        self.current_cycle = 0
+        self.max_cycles = int(connection_specs.max_cycles)
         self.eta = connection_specs.eta
         if self.eta is not None:
             self.eta = self.pars_eta_to_datetime(self.eta)
@@ -52,6 +54,7 @@ class Page_scraper():
                 self.authenticate(session)
 
             is_matched = self.check_exists(session)
+            self.current_cycle+=1
 
             # announce results
             results = self.signalize_results(is_success=is_matched)
@@ -59,18 +62,30 @@ class Page_scraper():
 
 
     def signalize_results(self, is_success):
-        # returns dict: IS_SUCCESS, TIMESTAMP, MSG, URL
-        message_success = self.msg
-        message_fail = 'Sequence was never found. Try again.'
-        message = message_success if is_success else message_fail
         timestamp = datetime.datetime.strftime(datetime.datetime.now(), '%d-%m-%Y %H:%M:%S')
+
+        if is_success:
+            log_line = self.msg
+            delay = 0
+        else:
+            delay = self.get_delay_between_connections()
+            log_line = self.compose_log_line(delay)
+        
+        log_line = str(timestamp) + ' | ' + log_line
+
         return {'IS_SUCCESS':is_success, 
-                'TIMESTAMP':timestamp, 
-                'MSG':message,
-                'URL':self.url}
+                'LOG_LINE':log_line,
+                'DELAY': delay
+                }
 
 
-    def wait_between_connections(self):
+    def compose_log_line(self, delay):
+        delay = int(delay)
+        cycle_part = f'CYCLE {int(self.current_cycle)} of {self.max_cycles}'
+        return f' {cycle_part} | Nothing Found | Continuing in {delay} seconds...'
+
+
+    def get_delay_between_connections(self):
         
         # Estimated Time of Arrival - modifies wait time in accordance
         # to time delta to the event 
@@ -89,8 +104,7 @@ class Page_scraper():
         # safety check
         time_wait = max(time_wait, self.MIN_INTERVAL)
 
-        print('ITERATION: {} | WAIT_TIME: {:.2f}'.format(self.CYCLES_COUNT, time_wait))
-        time.sleep(time_wait)
+        return time_wait
 
 
     def check_exists(self, session):

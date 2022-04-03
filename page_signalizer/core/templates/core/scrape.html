@@ -4,6 +4,8 @@
 
 <audio id="notification_sound" src="../../../media/notification.mp3" preload="auto"></audio>
 
+<h2>{{ template.name }}</h2>
+<br>
 <div class="container">
     <div class="card">
         <div class="h-100 row align-items-center" id="main_div">
@@ -29,14 +31,14 @@
 
     scrapeSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            const msg = data.timestamp + ' | ' + data.msg + '\n';
-            document.querySelector('#scrape-log').value += msg;
+            const log_line = data.log_line
+            document.querySelector('#scrape-log').value += log_line + '\n';
 
             if(data.is_success){                
-                // Create new button directing to the page
+                // Create new button redirecting to the page
                 document.querySelector('#scrape-message-submit').remove();
                 const link_button = document.createElement("a");
-                link_button.href = data.url;
+                link_button.href = "{{ template.url }}";
                 link_button.className = "btn btn-primary";
                 const text = document.createTextNode('Go to Page');
                 link_button.appendChild(text);
@@ -45,9 +47,9 @@
 
                 // notify user
                 document.getElementById('notification_sound').play();
-                if (window.confirm(data.title + '\n\n' + data.msg + '\n\n' + 'Press OK to redirect.')) 
+                if (window.confirm("{{ template.title }}" + '\n\n' + log_line + '\n\n' + 'Press OK to redirect.')) 
                 {
-                window.location.href=data.url;
+                window.location.href= "{{ template.url }}";
                 };
             }
             

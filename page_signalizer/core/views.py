@@ -18,7 +18,7 @@ def home_page(request):
 # login require in urls.py
 class Render_add(CreateView):
     model = Connection_Spec
-    fields = ['name', 'url', 'seq', 'interval_seconds', 'max_cycles', 'rand', 'eta']
+    fields = ['name', 'url', 'seq', 'interval_seconds', 'max_cycles', 'rand', 'eta' , 'title','msg']
     template_name = 'core/add.html'
 
 
@@ -33,21 +33,29 @@ class Render_add(CreateView):
 @login_required
 def render_scrape(request, id):
     template = Connection_Spec.objects.get(id=id)
+    is_request_by_owner = request.user == template.owner
     context = {'template': template}
 
-    return render(request, 'core/scrape.html', context)
-
+    if is_request_by_owner:
+        return render(request, 'core/scrape.html', context)
+    else:
+        return render(request, 'core/permissions_denied.html', context)
 
 @login_required
 def update_template(request, id):
     template = Connection_Spec.objects.get(id=id)
     form = Connection_Spec_CreationForm(request.POST or None, instance=template)
+    is_request_by_owner = request.user == template.owner
 
     if form.is_valid():
         form.save()
         return redirect('/')
     
-    return render(request, 'core/update.html', {'form': form, 'template':template})
+    context = {'form': form, 
+                'template':template,
+                'is_permitted': is_request_by_owner}
+
+    return render(request, 'core/update.html', context)
 
 
 @login_required

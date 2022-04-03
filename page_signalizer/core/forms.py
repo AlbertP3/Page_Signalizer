@@ -4,4 +4,4 @@ from .models import Connection_Spec
 class Connection_Spec_CreationForm(forms.ModelForm):
     class Meta:
         model = Connection_Spec
-        fields = ['name', 'url', 'seq', 'interval_seconds', 'max_cycles', 'rand', 'eta']   
+        fields = ['name', 'url', 'seq', 'interval_seconds', 'max_cycles', 'rand', 'eta', 'title', 'msg']   

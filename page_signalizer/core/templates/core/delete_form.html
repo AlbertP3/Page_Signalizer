@@ -7,17 +7,21 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 offset-md-4">
-            <div class="card">
-                <div class="form-group">
-                    <div>
+            <div class="card">            
                         <br>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </br>
-                    </div>
-                </div>
+                        {% if is_permitted %}
+                        <div class="form-group">    
+                            <div>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                            <a href="{% url 'core:home' %}"><button class="btn btn-danger">You have no permissions to delete this template</button></a>  
+                        {% endif %}
+                    </br>  
             </div>
         </div>
     </div>

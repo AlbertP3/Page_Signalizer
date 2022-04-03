@@ -66,14 +66,15 @@ class ScrapeConsumer(WebsocketConsumer):
         # send message to the page (update content)
         if self.do_proceed:
             results = self.scraper.get_scraping_results()
+            
             self.send(text_data=json.dumps({
             'is_success': results['IS_SUCCESS'],
-            'msg': results['MSG'],
-            'timestamp': results['TIMESTAMP'],
-            'url': results['URL'],
+            'log_line': results['LOG_LINE'],
             'title': self.connection_specs.title,
             }))
-            time.sleep(float(self.connection_specs.interval_seconds))
+
+            time.sleep(int(results['DELAY']))
+
             if results['IS_SUCCESS']:
                 self.do_proceed = False
         else:
